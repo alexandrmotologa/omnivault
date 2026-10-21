@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { vault } from './lib/db/sqlite';
-import { Article, ArticleStatus, Highlight, RssFeed, SearchResult, VaultStats } from './lib/db/types';
+import { Article, ArticleStatus, Highlight, RssFeed, SearchResult, VaultStats, Flashcard } from './lib/db/types';
 import { loadPreferences, savePreferences, UserPreferences, ReaderTheme } from './lib/storage/preferences';
 import { ttsEngine, TTSState } from './lib/tts/speech';
+import { DEFAULT_SMART_VIEWS, filterArticlesBySmartView } from './lib/vault/smartViews';
 
 import { AppHeader } from './components/layout/AppHeader';
 import { AppSidebar } from './components/layout/AppSidebar';
@@ -16,6 +17,8 @@ import { ExportSyncModal } from './components/export/ExportSyncModal';
 import { AnalyticsDashboard } from './components/stats/AnalyticsDashboard';
 import { ReaderSettingsModal } from './components/reader/ReaderSettingsModal';
 import { ShortcutsCheatSheet } from './components/common/ShortcutsCheatSheet';
+import { DailyReviewModal } from './components/srs/DailyReviewModal';
+import { KnowledgeGraphModal } from './components/graph/KnowledgeGraphModal';
 
 export function App() {
   // Database & Content State
@@ -24,10 +27,12 @@ export function App() {
   const [feeds, setFeeds] = useState<RssFeed[]>([]);
   const [stats, setStats] = useState<VaultStats | null>(null);
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
+  const [dueFlashcards, setDueFlashcards] = useState<Flashcard[]>([]);
 
   // Navigation & Filter State
   const [currentStatus, setCurrentStatus] = useState<ArticleStatus | 'favorites' | 'highlights'>('inbox');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedSmartView, setSelectedSmartView] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
 
@@ -42,6 +47,8 @@ export function App() {
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
 
   // TTS State
   const [ttsState, setTTSState] = useState<TTSState>(ttsEngine.getState());
@@ -51,15 +58,18 @@ export function App() {
   // Reload vault data
   const loadVaultData = useCallback(async () => {
     try {
+      await vault.syncFlashcardsFromHighlights();
       const allArticles = await vault.getArticles();
       const allHighlights = await vault.getHighlights();
       const allFeeds = await vault.getFeeds();
       const vaultStats = await vault.getStats();
+      const due = await vault.getDueFlashcards();
 
       setArticles(allArticles);
       setHighlights(allHighlights);
       setFeeds(allFeeds);
       setStats(vaultStats);
+      setDueFlashcards(due);
     } catch (err) {
       console.error('Error loading vault data:', err);
     }
@@ -238,18 +248,56 @@ export function App() {
     await loadVaultData();
   };
 
-  // Filter articles based on sidebar selection
-  const filteredArticles = articles.filter((a) => {
-    if (selectedTag) {
-      return a.tags.includes(selectedTag);
+  // SRS Review actions
+  const handleRecordReview = async (
+    cardId: string,
+    nextReviewAt: string,
+    intervalDays: number,
+    easeFactor: number,
+    repetitions: number
+  ) => {
+    await vault.recordFlashcardReview(cardId, nextReviewAt, intervalDays, easeFactor, repetitions);
+    await loadVaultData();
+  };
+
+  const handleOpenArticleById = async (articleId: string) => {
+    const art = await vault.getArticleById(articleId);
+    if (art) {
+      setIsReviewModalOpen(false);
+      setIsGraphModalOpen(false);
+      setActiveArticle(art);
     }
-    if (currentStatus === 'favorites') return a.favorite === 1;
-    if (currentStatus === 'highlights') {
-      const hasHl = highlights.some((h) => h.article_id === a.id);
-      return hasHl;
+  };
+
+  // Calculate Smart View counts
+  const smartViewCounts = useMemo(() => {
+    const res: Record<string, number> = {};
+    for (const sv of DEFAULT_SMART_VIEWS) {
+      res[sv.id] = filterArticlesBySmartView(articles, highlights, sv).length;
     }
-    return a.status === currentStatus;
-  });
+    return res;
+  }, [articles, highlights]);
+
+  // Filter articles based on sidebar selection or smart view
+  const filteredArticles = useMemo(() => {
+    if (selectedSmartView) {
+      const activeSv = DEFAULT_SMART_VIEWS.find((v) => v.id === selectedSmartView);
+      if (activeSv) {
+        return filterArticlesBySmartView(articles, highlights, activeSv);
+      }
+    }
+    return articles.filter((a) => {
+      if (selectedTag) {
+        return a.tags.includes(selectedTag);
+      }
+      if (currentStatus === 'favorites') return a.favorite === 1;
+      if (currentStatus === 'highlights') {
+        const hasHl = highlights.some((h) => h.article_id === a.id);
+        return hasHl;
+      }
+      return a.status === currentStatus;
+    });
+  }, [articles, highlights, selectedSmartView, selectedTag, currentStatus]);
 
   // Calculate status counts for sidebar
   const counts = {
@@ -259,7 +307,12 @@ export function App() {
     archived: articles.filter((a) => a.status === 'archived').length,
     trash: articles.filter((a) => a.status === 'trash').length,
     highlights: highlights.length,
+    dueReviews: stats?.dueFlashcardsCount ?? dueFlashcards.length,
   };
+
+  const selectedSmartViewTitle = selectedSmartView
+    ? DEFAULT_SMART_VIEWS.find((v) => v.id === selectedSmartView)?.name || null
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)]">
@@ -273,6 +326,9 @@ export function App() {
         onOpenStatsModal={() => setIsStatsModalOpen(true)}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenReviewModal={() => setIsReviewModalOpen(true)}
+        onOpenGraphModal={() => setIsGraphModalOpen(true)}
+        dueReviewsCount={counts.dueReviews}
         currentTheme={preferences.theme}
         onThemeChange={(th: ReaderTheme) => handleUpdatePreferences({ ...preferences, theme: th })}
       />
@@ -300,11 +356,26 @@ export function App() {
           {/* Left Navigation Sidebar */}
           <AppSidebar
             currentStatus={currentStatus}
-            onSelectStatus={setCurrentStatus}
+            onSelectStatus={(st) => {
+              setCurrentStatus(st);
+              setSelectedSmartView(null);
+            }}
             selectedTag={selectedTag}
-            onSelectTag={setSelectedTag}
+            onSelectTag={(tg) => {
+              setSelectedTag(tg);
+              setSelectedSmartView(null);
+            }}
+            selectedSmartView={selectedSmartView}
+            onSelectSmartView={(svId) => {
+              setSelectedSmartView(svId);
+              if (svId) setSelectedTag(null);
+            }}
+            smartViews={DEFAULT_SMART_VIEWS}
+            smartViewCounts={smartViewCounts}
             tags={stats?.tagCounts || []}
             counts={counts}
+            onOpenDailyReview={() => setIsReviewModalOpen(true)}
+            onOpenKnowledgeGraph={() => setIsGraphModalOpen(true)}
             onOpenBookmarklet={() => setIsBookmarkletOpen(true)}
           />
 
@@ -316,6 +387,7 @@ export function App() {
             highlights={highlights}
             currentStatus={currentStatus}
             selectedTag={selectedTag}
+            selectedSmartViewTitle={selectedSmartViewTitle}
             onOpenArticle={(art) => setActiveArticle(art)}
             onToggleFavorite={handleToggleFavorite}
             onUpdateStatus={handleUpdateStatus}
@@ -389,7 +461,26 @@ export function App() {
         isOpen={isShortcutsOpen}
         onClose={() => setIsShortcutsOpen(false)}
       />
+
+      <DailyReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        flashcards={dueFlashcards}
+        onRecordReview={handleRecordReview}
+        onOpenArticleById={handleOpenArticleById}
+      />
+
+      <KnowledgeGraphModal
+        isOpen={isGraphModalOpen}
+        onClose={() => setIsGraphModalOpen(false)}
+        articles={articles}
+        onOpenArticle={(art) => {
+          setIsGraphModalOpen(false);
+          setActiveArticle(art);
+        }}
+      />
     </div>
   );
 }
+
 export default App;

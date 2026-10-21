@@ -17,6 +17,7 @@ interface ArticleListProps {
   highlights: Highlight[];
   currentStatus: ArticleStatus | 'favorites' | 'highlights';
   selectedTag: string | null;
+  selectedSmartViewTitle?: string | null;
   onOpenArticle: (article: Article) => void;
   onToggleFavorite: (id: string, e: React.MouseEvent) => void;
   onUpdateStatus: (id: string, status: ArticleStatus, e: React.MouseEvent) => void;
@@ -32,6 +33,7 @@ export const ArticleList: React.FC<ArticleListProps> = ({
   highlights,
   currentStatus,
   selectedTag,
+  selectedSmartViewTitle,
   onOpenArticle,
   onToggleFavorite,
   onUpdateStatus,
@@ -81,6 +83,8 @@ export const ArticleList: React.FC<ArticleListProps> = ({
                 <Search className="w-5 h-5 text-blue-500" />
                 <span>Search: &ldquo;{searchQuery}&rdquo;</span>
               </>
+            ) : selectedSmartViewTitle ? (
+              selectedSmartViewTitle
             ) : selectedTag ? (
               `#${selectedTag}`
             ) : (

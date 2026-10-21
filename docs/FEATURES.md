@@ -68,3 +68,53 @@ A detailed reference of features implemented in Omnivault.
 - **Logseq Outliner Export**: Generates a ZIP archive formatted with outliner bullets.
 - **Complete JSON Backup**: Exports the entire SQLite database state into an open JSON structure.
 - **Omnivore Migration**: Directly imports Omnivore exported archive files.
+
+---
+
+## 7. Spaced Repetition & Daily Review (SRS)
+
+- **Automated Card Sync**: Derives flashcard decks directly from your highlights and margin notes.
+- **SM-2 Leitner Scheduling**: Computes review intervals based on graded retention feedback:
+  - Again: 1 day interval
+  - Hard: 3 days interval
+  - Good: 7 days interval
+  - Easy: 14 days interval
+- **Interactive Review Modal**: 3D card flipping, keyboard controls (`Space` to flip, `1` to `4` to grade), completion progress, and confetti celebrations.
+- **Due Badges**: Real-time counter in navigation header and sidebar displays the number of flashcards due today.
+
+---
+
+## 8. Interactive Knowledge Graph View
+
+- **Force-Directed Physics**: HTML5 2D Canvas engine simulates repulsion, spring link attraction, and center gravity.
+- **Multi-Node Visual Taxonomy**:
+  - Blue nodes: Articles and research papers
+  - Emerald nodes: Topical tags
+  - Purple nodes: Web domains and publishers
+- **Exploration Controls**: Zoom with mouse wheel, drag to pan canvas, drag individual nodes to reorganize, search by keyword, and click to open articles directly.
+
+---
+
+## 9. Smart Offline Summarizer & BYOK AI
+
+- **100% Offline TextRank**: Graph-based extractive summarizer scores sentences based on lexical centrality without sending data over the network.
+- **Difficulty Grading**: Classifies reading difficulty into Accessible, Intermediate, and Deep Technical categories.
+- **Bring-Your-Own-Key Assistant**: Optional support for local Ollama instances (`http://localhost:11434`) and OpenAI-compatible endpoints to answer questions about saved research.
+
+---
+
+## 10. Smart Views & Dynamic Filters
+
+- **Quick Reads**: Automatically aggregates articles with reading times under 6 minutes.
+- **Deep Dives**: Isolates long-form technical papers and architecture write-ups with reading times over 8 minutes.
+- **Key Highlights**: Surfaces documents containing multiple highlights and annotations.
+- **Starred Research**: Fast access to favorite papers and bookmarks.
+
+---
+
+## 11. PDF Research Paper & Companion Extension Support
+
+- **PDF Ingestion**: Drag and drop multi-page PDF papers. The extraction pipeline leverages `pdfjs-dist` to pull clean text and metadata into the SQLite FTS5 index.
+- **Manifest V3 Extension**: Companion extension allows one-click clipping of active tabs directly into Omnivault via `Alt+S` shortcut.
+- **Zen Mode**: Press `z` in reader view to hide all sidebars and toolbars for focused reading.
+- **Hands-Free Auto-Scroll**: Press `Shift+Space` to trigger smooth automatic scrolling with an interactive speed HUD.

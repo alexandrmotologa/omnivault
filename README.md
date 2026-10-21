@@ -79,13 +79,34 @@ You can highlight text in five colors, record margin notes, listen to saved arti
   <img src="docs/images/omnivault-4.png" alt="Sync and Export Modal" width="100%" />
 </p>
 
-### 5. Multi-Source Web Clipper & EPUB Reader
-- URL Web Clipper: multi-proxy failover pipeline scrapes clean article text from remote sites.
-- EPUB parser: drag and drop `.epub` digital books directly into your vault for offline reading.
-- 1-Click Bookmarklet: drag the provided JavaScript bookmarklet to your browser toolbar to clip any page with a click.
-- RSS & Atom Feed Reader: subscribe to tech blogs and publications, preview summaries, and save items to your vault.
+### 5. Spaced Repetition & Daily Review (SRS)
+- Automated flashcard generation derived from your color-coded highlights and margin notes.
+- Leitner SM-2 scheduling algorithm with dynamic intervals (Again 1d, Hard 3d, Good 7d, Easy 14d).
+- 3D flip card review modal with hotkey navigation (Space to flip, 1 to 4 to grade) and streak tracking.
 
-### 6. Reading Analytics & Custom Typography
+### 6. Interactive Knowledge Graph
+- HTML5 Canvas 2D force-directed physics simulation mapping relationships between documents, tags, and domains.
+- Real-time zoom, pan, node dragging, keyword search filtering, and click-to-read navigation.
+
+### 7. Offline TextRank Summarizer & Bring-Your-Own-Key AI
+- 100% offline graph-based TextRank algorithm extracts core takeaways, reading ease levels, and keyword clusters.
+- Optional Bring-Your-Own-Key (BYOK) assistant supporting local Ollama (`localhost:11434`) and OpenAI-compatible endpoints for contextual Q&A.
+
+### 8. Smart Views & Dynamic Navigation
+- Automated filters for Quick Reads (under 5 minutes), Deep Dives (over 8 minutes), Key Highlights (annotated papers), and Starred Research.
+
+### 9. Zen Mode & Hands-Free Auto-Scroll
+- Focused reading view toggled with `z` hides all navigation chrome for distraction-free study.
+- Hands-free auto-scroll engine toggled with `Shift+Space` with floating speed regulator (15 to 120 px/s).
+
+### 10. Multi-Format Ingestion: Web, PDF, EPUB & RSS
+- URL Web Clipper: multi-proxy failover pipeline scrapes clean article text from remote sites.
+- PDF Paper Parser: drag and drop research papers for automatic text and metadata extraction via `pdfjs-dist`.
+- EPUB reader: drag and drop digital books directly into your vault for offline reading.
+- Manifest V3 Extension: browser companion extension with `Alt+S` shortcut to clip articles directly into local storage.
+- RSS and Atom Feed Reader: subscribe to tech blogs and publications with one-click vault import.
+
+### 11. Reading Analytics & Custom Typography
 - 5 reading color themes: Paper, Sepia, Charcoal, Nord, and OLED Black.
 - Configurable typography: Serif (Georgia), Sans-Serif (System), Monospace (JetBrains Mono), with line height and margin width sliders.
 - Bionic reading mode guides natural eye tracking.
@@ -132,6 +153,8 @@ You can highlight text in five colors, record margin notes, listen to saved arti
 | `/` | Focus SQLite FTS5 search input |
 | `j` / `k` | Next / previous article or scroll down / up |
 | `h` | Highlight selected text in reader |
+| `z` | Toggle Zen Mode (hide distractions and focus on prose) |
+| `Shift+Space` | Toggle hands-free auto-scroll teleprompter |
 | `e` or `a` | Archive current article |
 | `s` | Toggle star / favorite |
 | `t` | Play / Pause text-to-speech podcast |

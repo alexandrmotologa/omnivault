@@ -42,6 +42,25 @@ CREATE TABLE IF NOT EXISTS highlights (
 
 CREATE INDEX IF NOT EXISTS idx_highlights_article ON highlights(article_id);
 
+-- Flashcards for Spaced Repetition (SRS Leitner)
+CREATE TABLE IF NOT EXISTS flashcards (
+  id TEXT PRIMARY KEY,
+  highlight_id TEXT NOT NULL,
+  article_id TEXT NOT NULL,
+  article_title TEXT NOT NULL,
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  color TEXT NOT NULL DEFAULT 'yellow',
+  next_review_at TEXT NOT NULL,
+  interval_days INTEGER NOT NULL DEFAULT 1,
+  ease_factor REAL NOT NULL DEFAULT 2.5,
+  repetitions INTEGER NOT NULL DEFAULT 0,
+  last_reviewed_at TEXT,
+  FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_flashcards_review ON flashcards(next_review_at);
+
 -- Tags catalog
 CREATE TABLE IF NOT EXISTS tags (
   id TEXT PRIMARY KEY,

@@ -21,6 +21,7 @@ export interface Article {
   scroll_progress: number; // 0.0 to 1.0
   tags: string[]; // parsed from JSON string or comma-separated
   rss_source_id: string | null;
+  summary_bullets?: string[]; // Auto-generated executive takeaways
 }
 
 export interface Highlight {
@@ -49,6 +50,43 @@ export interface RssFeed {
   icon_url: string;
   last_fetched_at: string | null;
   unread_count: number;
+}
+
+export interface Flashcard {
+  id: string;
+  highlight_id: string;
+  article_id: string;
+  article_title: string;
+  front: string; // The highlight quote or prompt
+  back: string;  // The user's margin note or contextual answer
+  color: HighlightColor;
+  next_review_at: string; // ISO date string
+  interval_days: number;
+  ease_factor: number;
+  repetitions: number;
+  last_reviewed_at: string | null;
+}
+
+export interface SmartView {
+  id: string;
+  name: string;
+  iconName: string;
+  description: string;
+  filter: {
+    status?: ArticleStatus;
+    favorite?: boolean;
+    minReadingTime?: number;
+    maxReadingTime?: number;
+    minHighlights?: number;
+    tag?: string;
+  };
+}
+
+export interface AISettings {
+  provider: 'offline' | 'ollama' | 'openai' | 'groq';
+  endpoint: string;
+  apiKey: string;
+  model: string;
 }
 
 export interface SearchResult {
@@ -83,6 +121,7 @@ export interface VaultStats {
   trashCount: number;
   favoriteCount: number;
   totalHighlights: number;
+  dueFlashcardsCount: number;
   totalWordsRead: number;
   estimatedMinutesRead: number;
   streakDays: number;

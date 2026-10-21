@@ -8,7 +8,9 @@ import {
   HelpCircle,
   Sliders,
   Database,
-  Bookmark
+  Bookmark,
+  Brain,
+  Network,
 } from 'lucide-react';
 import { ReaderTheme } from '../../lib/storage/preferences';
 
@@ -21,6 +23,9 @@ interface AppHeaderProps {
   onOpenStatsModal: () => void;
   onOpenShortcuts: () => void;
   onOpenSettings: () => void;
+  onOpenReviewModal: () => void;
+  onOpenGraphModal: () => void;
+  dueReviewsCount: number;
   currentTheme: ReaderTheme;
   onThemeChange: (t: ReaderTheme) => void;
 }
@@ -34,6 +39,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onOpenStatsModal,
   onOpenShortcuts,
   onOpenSettings,
+  onOpenReviewModal,
+  onOpenGraphModal,
+  dueReviewsCount,
   currentTheme,
   onThemeChange,
 }) => {
@@ -98,6 +106,30 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         >
           <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
           <span className="hidden sm:inline">Clip Webpage</span>
+        </button>
+
+        {/* Daily Review Flashcards Button with counter badge */}
+        <button
+          onClick={onOpenReviewModal}
+          className="relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 text-xs font-medium transition-colors"
+          title="Daily Review & Spaced Repetition Flashcards"
+        >
+          <Brain className="w-3.5 h-3.5" />
+          <span className="hidden md:inline">Daily Review</span>
+          {dueReviewsCount > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-purple-600 text-white font-bold">
+              {dueReviewsCount}
+            </span>
+          )}
+        </button>
+
+        {/* Knowledge Graph Button */}
+        <button
+          onClick={onOpenGraphModal}
+          className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
+          title="Interactive Knowledge Graph View"
+        >
+          <Network className="w-4 h-4 text-emerald-500" />
         </button>
 
         <button

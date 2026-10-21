@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omnivault Clipper</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #13151f;
+      --border: #232738;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --success: #10b981;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      width: 360px;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+    .brand-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      border-radius: 12px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .page-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .page-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #fff;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .domain-tag {
+      background: #1e2235;
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: #cbd5e1;
+      font-family: monospace;
+    }
+    .field-group {
+      margin-bottom: 14px;
+    }
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .input-text {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-text:focus {
+      border-color: var(--accent);
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    .btn-secondary {
+      background: var(--card-bg);
+      color: #cbd5e1;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #1c2030;
+      color: #fff;
+    }
+    .status-banner {
+      display: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin-top: 10px;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-banner.success {
+      display: flex;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+    .status-banner.error {
+      display: flex;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    .footer {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .kbd {
+      background: #1e2235;
+      border: 1px solid #2d334d;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-size: 10px;
+      font-family: monospace;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">V</div>
+      <span>Omnivault</span>
+      <span class="badge">SQLite FTS5</span>
+    </div>
+    <span class="kbd">Alt+S</span>
+  </div>
+
+  <div class="page-card">
+    <div class="page-title" id="tab-title">Loading current page...</div>
+    <div class="page-meta">
+      <span class="domain-tag" id="tab-domain">web</span>
+      <span id="tab-reading-time">Calculating...</span>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label" for="tags-input">Add Tags (comma separated)</label>
+    <input
+      type="text"
+      id="tags-input"
+      class="input-text"
+      placeholder="e.g. research, architecture, sqlite"
+    />
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="btn-clip">
+      <span>Clip to Omnivault</span>
+    </button>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+      <button class="btn btn-secondary" id="btn-download-md">
+        <span>Save Markdown</span>
+      </button>
+      <button class="btn btn-secondary" id="btn-copy-json">
+        <span>Copy JSON</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="status-banner" class="status-banner"></div>
+
+  <div class="footer">
+    <span>Zero Cloud &bull; Local-First</span>
+    <a href="http://localhost:5173" target="_blank" id="open-vault-link">Open Vault &rarr;</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

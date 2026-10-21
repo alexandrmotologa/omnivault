@@ -1,7 +1,7 @@
 import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
 import { SCHEMA_SQL } from './schema';
 import { INITIAL_ARTICLES, INITIAL_HIGHLIGHTS, INITIAL_FEEDS } from './seedData';
-import { Article, ArticleStatus, Highlight, RssFeed, SearchResult, VaultStats } from './types';
+import { Article, ArticleStatus, Highlight, RssFeed, SearchResult, VaultStats, Flashcard } from './types';
 
 // IndexedDB persistence fallback helper
 const IDB_NAME = 'omnivault_db_store';
@@ -447,6 +447,115 @@ class SQLiteVault {
     await this.persist();
   }
 
+  // --- Flashcards & Spaced Repetition (SRS) ---
+
+  async getDueFlashcards(): Promise<Flashcard[]> {
+    await this.init();
+    await this.syncFlashcardsFromHighlights();
+    const nowIso = new Date().toISOString();
+    return this.queryAll<Flashcard>(
+      'SELECT * FROM flashcards WHERE next_review_at <= ? ORDER BY next_review_at ASC;',
+      [nowIso]
+    );
+  }
+
+  async getAllFlashcards(): Promise<Flashcard[]> {
+    await this.init();
+    return this.queryAll<Flashcard>('SELECT * FROM flashcards ORDER BY next_review_at ASC;');
+  }
+
+  async saveFlashcard(card: Flashcard, doPersist = true): Promise<void> {
+    await this.init();
+    const sql = `
+      INSERT INTO flashcards (
+        id, highlight_id, article_id, article_title, front, back, color,
+        next_review_at, interval_days, ease_factor, repetitions, last_reviewed_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        front = excluded.front,
+        back = excluded.back,
+        color = excluded.color,
+        next_review_at = excluded.next_review_at,
+        interval_days = excluded.interval_days,
+        ease_factor = excluded.ease_factor,
+        repetitions = excluded.repetitions,
+        last_reviewed_at = excluded.last_reviewed_at;
+    `;
+    this.db.exec({
+      sql,
+      bind: [
+        card.id,
+        card.highlight_id,
+        card.article_id,
+        card.article_title,
+        card.front,
+        card.back,
+        card.color,
+        card.next_review_at,
+        card.interval_days,
+        card.ease_factor,
+        card.repetitions,
+        card.last_reviewed_at,
+      ],
+    });
+    if (doPersist) await this.persist();
+  }
+
+  async recordFlashcardReview(
+    cardId: string,
+    nextReviewAt: string,
+    intervalDays: number,
+    easeFactor: number,
+    repetitions: number
+  ): Promise<void> {
+    await this.init();
+    this.db.exec({
+      sql: `UPDATE flashcards SET
+        next_review_at = ?,
+        interval_days = ?,
+        ease_factor = ?,
+        repetitions = ?,
+        last_reviewed_at = ?
+        WHERE id = ?;`,
+      bind: [nextReviewAt, intervalDays, easeFactor, repetitions, new Date().toISOString(), cardId],
+    });
+    await this.persist();
+  }
+
+  async syncFlashcardsFromHighlights(): Promise<number> {
+    const highlights = await this.getHighlights();
+    const existing = new Set((await this.queryAll<{ id: string }>('SELECT id FROM flashcards;')).map((r) => r.id));
+    let created = 0;
+
+    for (const hl of highlights) {
+      const cardId = 'fc-' + hl.id;
+      if (!existing.has(cardId)) {
+        const article = await this.getArticleById(hl.article_id);
+        const card: Flashcard = {
+          id: cardId,
+          highlight_id: hl.id,
+          article_id: hl.article_id,
+          article_title: article?.title || 'Research Note',
+          front: hl.text,
+          back: hl.note || `Key concept from: "${article?.title || 'Article'}"`,
+          color: hl.color,
+          next_review_at: new Date().toISOString(),
+          interval_days: 1,
+          ease_factor: 2.5,
+          repetitions: 0,
+          last_reviewed_at: null,
+        };
+        await this.saveFlashcard(card, false);
+        created++;
+      }
+    }
+
+    if (created > 0) {
+      await this.persist();
+    }
+    return created;
+  }
+
   // --- Analytics & Statistics ---
 
   async logReadingSession(articleId: string, durationSeconds: number, wordsRead: number): Promise<void> {
@@ -468,6 +577,10 @@ class SQLiteVault {
     const trashCount = this.queryOne<{ count: number }>("SELECT count(*) as count FROM articles WHERE status = 'trash';")?.count || 0;
     const favoriteCount = this.queryOne<{ count: number }>('SELECT count(*) as count FROM articles WHERE favorite = 1;')?.count || 0;
     const totalHighlights = this.queryOne<{ count: number }>('SELECT count(*) as count FROM highlights;')?.count || 0;
+    const dueFlashcardsCount = this.queryOne<{ count: number }>(
+      'SELECT count(*) as count FROM flashcards WHERE next_review_at <= ?;',
+      [new Date().toISOString()]
+    )?.count || 0;
 
     const wordsSum = this.queryOne<{ total: number }>("SELECT sum(word_count) as total FROM articles WHERE status = 'archived' OR scroll_progress > 0.5;")
       ?.total || 0;
@@ -510,6 +623,7 @@ class SQLiteVault {
       trashCount,
       favoriteCount,
       totalHighlights,
+      dueFlashcardsCount,
       totalWordsRead: wordsSum || 4870,
       estimatedMinutesRead: Math.max(1, Math.round(durationSum / 60) || Math.round((wordsSum || 4870) / 200)),
       streakDays: 3,

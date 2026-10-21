@@ -4,6 +4,7 @@ import { Globe, FileText, Upload, Loader2, Sparkles, BookOpen } from 'lucide-rea
 import { fetchAndExtractUrl } from '../../lib/clipper/fetcher';
 import { extractArticleFromHtml } from '../../lib/clipper/extract';
 import { parseEpubFile } from '../../lib/clipper/epub';
+import { parsePdfFile } from '../../lib/clipper/pdf';
 import { Article } from '../../lib/db/types';
 
 interface ClipModalProps {
@@ -145,6 +146,8 @@ export const ClipArticleModal: React.FC<ClipModalProps> = ({
 
       if (lower.endsWith('.epub')) {
         extracted = await parseEpubFile(file);
+      } else if (lower.endsWith('.pdf')) {
+        extracted = await parsePdfFile(file);
       } else {
         const text = await file.text();
         extracted = extractArticleFromHtml(text);
@@ -158,7 +161,7 @@ export const ClipArticleModal: React.FC<ClipModalProps> = ({
         excerpt: extracted.excerpt,
         content_html: extracted.content_html,
         content_markdown: extracted.content_markdown,
-        site_name: lower.endsWith('.epub') ? 'EPUB Book' : 'Document',
+        site_name: lower.endsWith('.epub') ? 'EPUB Book' : lower.endsWith('.pdf') ? 'PDF Paper' : 'Document',
         published_at: extracted.published_at,
         saved_at: new Date().toISOString(),
         read_at: null,
@@ -167,7 +170,7 @@ export const ClipArticleModal: React.FC<ClipModalProps> = ({
         reading_time_minutes: extracted.reading_time_minutes,
         word_count: extracted.word_count,
         scroll_progress: 0,
-        tags: [lower.endsWith('.epub') ? 'epub' : 'file'],
+        tags: [lower.endsWith('.epub') ? 'epub' : lower.endsWith('.pdf') ? 'pdf' : 'file'],
         rss_source_id: null,
       };
 
@@ -397,16 +400,17 @@ export const ClipArticleModal: React.FC<ClipModalProps> = ({
                     Drag and drop your files here
                   </p>
                   <p className="text-[11px] text-[var(--text-muted)]">
-                    Supports <span className="font-semibold">.epub</span> books,{' '}
+                    Supports <span className="font-semibold">.pdf</span> research papers,{' '}
+                    <span className="font-semibold">.epub</span> books,{' '}
                     <span className="font-semibold">.html</span>, and{' '}
-                    <span className="font-semibold">.md</span> files
+                    <span className="font-semibold">.md</span>
                   </p>
                 </div>
 
                 <label className="inline-block">
                   <input
                     type="file"
-                    accept=".epub,.html,.htm,.md,.txt"
+                    accept=".pdf,.epub,.html,.htm,.md,.txt"
                     className="hidden"
                     onChange={(e) => handleFileUpload(e.target.files)}
                   />

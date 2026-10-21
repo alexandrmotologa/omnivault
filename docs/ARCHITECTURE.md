@@ -85,3 +85,41 @@ Articles are formatted as individual `.md` files:
 Articles are serialized using hierarchical bullet points:
 - Page properties at the top (`title::`, `url::`, `tags::`).
 - Highlights indented under an Outliner block (`- > quote` with child `- **Note:** note`).
+
+---
+
+## Spaced Repetition Architecture
+
+The spaced repetition system transforms passive annotations into active memory retention:
+- **Table Definition**: `flashcards` table stores `highlight_id`, `article_id`, `front_text`, `back_text`, `ease_factor`, `interval_days`, `repetitions`, `next_review_at`, and `state`.
+- **Card Synchronization**: Automatically indexes user highlights where either a margin note exists or highlighted text exceeds 20 characters.
+- **SM-2 Engine**: Review intervals double progressively with successful reviews and reset back to 1 day on `Again` selections.
+
+---
+
+## Knowledge Graph Engine
+
+- **Physics Simulation**: Custom 2D force-directed layout executed on HTML5 Canvas.
+- **Forces**:
+  - Coulomb Repulsion: $F = k / d^2$ prevents node overlap.
+  - Hooke Link Attraction: $F = -k \cdot (d - l_0)$ pulls connected articles and tags together.
+  - Centering Gravity: pull nodes back toward the canvas origin.
+  - Kinetic Damping: prevents continuous oscillation and stabilizes the graph into steady-state equilibrium.
+- **Projection**: Canvas coordinates are transformed into world space for smooth interactive panning, dragging, and wheel zooming.
+
+---
+
+## Offline TextRank & AI Pipeline
+
+- **TextRank Extractor**: Evaluates sentence relevance using undirected graph connectivity and word overlap scoring without external API calls.
+- **Readability Index**: Calculates reading level by analyzing sentence length, syllable distribution, and vocabulary complexity.
+- **BYOK LLM Client**: Optional client connects directly to local endpoints (Ollama at `localhost:11434`) or OpenAI-compatible gateways for user-directed synthesis and Q&A.
+
+---
+
+## PDF Ingestion Pipeline
+
+- Files dropped with MIME type `application/pdf` are loaded into `pdfjs-dist`.
+- Page text streams are extracted sequentially, preserving paragraph breaks.
+- Metadata (Author, Title, Creation Date) is parsed from the PDF Document Information dictionary.
+- Content is packaged into clean HTML and Markdown before insertion into the SQLite database.
