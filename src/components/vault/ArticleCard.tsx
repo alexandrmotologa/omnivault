@@ -46,7 +46,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   return (
     <div
       onClick={() => onOpen(article)}
-      className="group relative p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-blue-500/50 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+      className="article-card group relative p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-blue-500/50 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+      data-article-id={article.id}
     >
       <div className="space-y-2">
         {/* Card Header metadata */}

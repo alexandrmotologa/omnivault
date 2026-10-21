@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <clipPath id="squircle-clip">
+      <rect x="24" y="24" width="976" height="976" rx="220" />
+    </clipPath>
+
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <linearGradient id="amber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+
+    <linearGradient id="slate-facet-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+
+    <linearGradient id="slate-facet-mid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+
+    <linearGradient id="slate-facet-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <filter id="subtle-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <!-- Luxury White Squircle Container -->
+  <rect x="24" y="24" width="976" height="976" rx="220" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
+
+  <g clip-path="url(#squircle-clip)">
+    <g transform="translate(512, 512)" filter="url(#subtle-shadow)">
+
+      <!-- Hexagonal Architectural Gateway -->
+      <polygon points="
+        0,-390
+        338,-195
+        338,195
+        0,390
+        -338,195
+        -338,-195
+      " fill="none" stroke="#0f172a" stroke-width="40" stroke-linejoin="round" />
+
+      <polygon points="
+        0,-355
+        307,-177
+        307,177
+        0,355
+        -307,177
+        -307,-177
+      " fill="none" stroke="#00f5ff" stroke-width="4" opacity="0.45" stroke-dasharray="16, 12" />
+
+      <!-- Symmetrical Origami Owl Mascot (Athena Knowledge Guardian) -->
+      <!-- 1. Solid Watertight Base Silhouette -->
+      <path d="
+        M 0 -290
+        L 85 -245
+        L 145 -315
+        L 155 -195
+        L 245 -140
+        L 230 -20
+        L 215 130
+        L 150 250
+        L 80 310
+        L 0 340
+        L -80 310
+        L -150 250
+        L -215 130
+        L -230 -20
+        L -245 -140
+        L -155 -195
+        L -145 -315
+        L -85 -245
+        Z
+      " fill="#0b0f19" />
+
+      <!-- 2. Crown & Horned Ear Tufts -->
+      <!-- Left Ear Horn -->
+      <polygon points="-85,-245 -145,-315 -155,-195 -70,-180" fill="url(#slate-facet-light)" />
+      <polygon points="-155,-195 -145,-315 -115,-220" fill="url(#slate-facet-mid)" />
+      <!-- Right Ear Horn -->
+      <polygon points="85,-245 145,-315 155,-195 70,-180" fill="url(#slate-facet-dark)" />
+      <polygon points="155,-195 145,-315 115,-220" fill="url(#slate-facet-mid)" />
+
+      <!-- Forehead Keystone & Brow Ridge -->
+      <polygon points="0,-290 85,-245 0,-175" fill="url(#slate-facet-dark)" />
+      <polygon points="0,-290 -85,-245 0,-175" fill="url(#slate-facet-light)" />
+      <polygon points="0,-175 -70,-180 -95,-130 0,-115" fill="url(#slate-facet-light)" />
+      <polygon points="0,-175 70,-180 95,-130 0,-115" fill="url(#slate-facet-mid)" />
+
+      <!-- Outer Cheeks & Brow Winglets -->
+      <polygon points="-155,-195 -245,-140 -170,-90 -95,-130" fill="url(#slate-facet-mid)" />
+      <polygon points="155,-195 245,-140 170,-90 95,-130" fill="url(#slate-facet-dark)" />
+
+      <!-- 3. Facial Discs / Eye Sockets -->
+      <!-- Left Eye Facets -->
+      <polygon points="-95,-130 -170,-90 -160,0 -85,15" fill="url(#slate-facet-light)" />
+      <polygon points="-95,-130 -85,15 0,-15 0,-115" fill="url(#slate-facet-mid)" />
+      <!-- Right Eye Facets -->
+      <polygon points="95,-130 170,-90 160,0 85,15" fill="url(#slate-facet-dark)" />
+      <polygon points="95,-130 85,15 0,-15 0,-115" fill="url(#slate-facet-mid)" />
+
+      <!-- 4. Optical Vault Iris Eyes (Concentric Research Aperture) -->
+      <!-- Left Eye -->
+      <g transform="translate(-80, -50)">
+        <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="#0f172a" stroke="#00f5ff" stroke-width="4" />
+        <circle cx="0" cy="0" r="26" fill="url(#cyan-glow)" />
+        <circle cx="0" cy="0" r="14" fill="#0b0f19" />
+        <circle cx="-5" cy="-5" r="4.5" fill="#ffffff" />
+      </g>
+      <!-- Right Eye -->
+      <g transform="translate(80, -50)">
+        <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="#0f172a" stroke="#00f5ff" stroke-width="4" />
+        <circle cx="0" cy="0" r="26" fill="url(#cyan-glow)" />
+        <circle cx="0" cy="0" r="14" fill="#0b0f19" />
+        <circle cx="-5" cy="-5" r="4.5" fill="#ffffff" />
+      </g>
+
+      <!-- 5. Beak / Vault Keystone Dial -->
+      <polygon points="0,-20 -24,40 0,75" fill="url(#amber-accent)" />
+      <polygon points="0,-20 24,40 0,75" fill="#d97706" />
+      <polygon points="0,30 -15,42 0,75" fill="#ea580c" />
+
+      <!-- 6. Folded Vault Wings & Lateral Armor -->
+      <!-- Left Wing Plating -->
+      <polygon points="-245,-140 -230,-20 -160,0" fill="url(#slate-facet-dark)" />
+      <polygon points="-230,-20 -215,130 -140,110 -160,0" fill="url(#slate-facet-mid)" />
+      <polygon points="-215,130 -150,250 -100,195 -140,110" fill="url(#slate-facet-dark)" />
+      <!-- Right Wing Plating -->
+      <polygon points="245,-140 230,-20 160,0" fill="url(#slate-facet-mid)" />
+      <polygon points="230,-20 215,130 140,110 160,0" fill="url(#slate-facet-dark)" />
+      <polygon points="215,130 150,250 100,195 140,110" fill="url(#slate-facet-mid)" />
+
+      <!-- 7. Breastplate Pages / Research Vault Core Plates -->
+      <!-- Upper Chest Tier -->
+      <polygon points="0,75 -75,85 -85,15 0,-15" fill="url(#slate-facet-light)" />
+      <polygon points="0,75 75,85 85,15 0,-15" fill="url(#slate-facet-mid)" />
+
+      <!-- Mid Chest Chevron Tier -->
+      <polygon points="0,75 -75,85 -55,160 0,140" fill="url(#slate-facet-mid)" />
+      <polygon points="0,75 75,85 55,160 0,140" fill="url(#slate-facet-dark)" />
+      <!-- Electric Cyan Core Indicator -->
+      <polygon points="0,100 -20,135 0,150 20,135" fill="url(#cyan-glow)" opacity="0.9" />
+
+      <!-- Lower Plating Tier -->
+      <polygon points="0,140 -55,160 -40,230 0,215" fill="url(#slate-facet-light)" />
+      <polygon points="0,140 55,160 40,230 0,215" fill="url(#slate-facet-mid)" />
+
+      <!-- Tail Vault Base -->
+      <polygon points="0,215 -40,230 -80,310 0,340" fill="url(#slate-facet-mid)" />
+      <polygon points="0,215 40,230 80,310 0,340" fill="url(#slate-facet-dark)" />
+      <polygon points="-80,310 -150,250 -100,195 -40,230" fill="url(#slate-facet-dark)" />
+      <polygon points="80,310 150,250 100,195 40,230" fill="url(#slate-facet-mid)" />
+
+      <!-- Subtle Cyan Data Accents on Wing Shoulders -->
+      <line x1="-200" y1="-70" x2="-140" y2="-40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+      <line x1="200" y1="-70" x2="140" y2="-40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+
+    </g>
+  </g>
+</svg>

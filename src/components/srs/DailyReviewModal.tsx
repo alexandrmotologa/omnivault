@@ -219,7 +219,7 @@ export const DailyReviewModal: React.FC<DailyReviewModalProps> = ({
             {/* Action Grading Bar */}
             {isFlipped ? (
               <div className="space-y-2 animate-in fade-in duration-150">
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
                     onClick={() => handleGrade('again')}
                     className="p-2.5 rounded-lg border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 font-medium text-center transition-colors"

@@ -11,6 +11,7 @@ import {
   Bookmark,
   Brain,
   Network,
+  Menu,
 } from 'lucide-react';
 import { ReaderTheme } from '../../lib/storage/preferences';
 
@@ -28,6 +29,7 @@ interface AppHeaderProps {
   dueReviewsCount: number;
   currentTheme: ReaderTheme;
   onThemeChange: (t: ReaderTheme) => void;
+  onToggleMobileSidebar?: () => void;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -44,6 +46,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   dueReviewsCount,
   currentTheme,
   onThemeChange,
+  onToggleMobileSidebar,
 }) => {
   const themes: { id: ReaderTheme; label: string; iconColor: string }[] = [
     { id: 'paper', label: 'Paper', iconColor: 'bg-[#faf9f5] border border-amber-200' },
@@ -56,7 +59,17 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   return (
     <header className="sticky top-0 z-30 h-14 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/90 backdrop-blur-md px-4 flex items-center justify-between gap-4">
       {/* Brand logo & tagline */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {onToggleMobileSidebar && (
+          <button
+            onClick={onToggleMobileSidebar}
+            className="md:hidden p-1.5 -ml-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
+            title="Toggle Menu"
+            aria-label="Toggle navigation menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
         <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs">
           <Bookmark className="w-4 h-4 fill-current stroke-blue-600" />
         </div>

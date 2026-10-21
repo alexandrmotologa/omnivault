@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/omnivault_logo.svg" alt="Omnivault Logo" width="128" height="128" />
+  <img src="docs/images/logo.png?raw=true" alt="Omnivault Logo" width="130" style="border-radius: 24px;" />
 </p>
 
 <h1 align="center">Omnivault</h1>
@@ -65,28 +65,28 @@ You can highlight text in five colors, record margin notes, listen to saved arti
 - Splits articles into natural paragraph units with synchronized karaoke highlighting.
 - Floating playback dock lets you adjust reading speed from 0.75x to 2.0x, skip paragraphs, and pick from installed system neural voices.
 
-<p align="center">
-  <img src="docs/images/omnivault-3.png" alt="On-Device Text-to-Speech Audio Player" width="100%" />
-</p>
-
 ### 4. Bidirectional Sync & PKM Export
 - **Obsidian Vault Export**: Generates a structured ZIP archive containing individual Markdown files with YAML frontmatter (`title`, `source`, `author`, `tags`, `omnivault_id`) and formatted callout blocks (`> [!quote]` and `> [!note]`).
 - **Logseq Package**: Exports hierarchically nested outliner bullets ready for Logseq graph directories.
 - **Full JSON Backup & Restore**: Creates atomic backups of articles, highlights, and RSS feeds.
 - **Omnivore Migration**: Directly imports JSON export files from Omnivore and Wallabag.
 
-<p align="center">
-  <img src="docs/images/omnivault-4.png" alt="Sync and Export Modal" width="100%" />
-</p>
-
 ### 5. Spaced Repetition & Daily Review (SRS)
 - Automated flashcard generation derived from your color-coded highlights and margin notes.
 - Leitner SM-2 scheduling algorithm with dynamic intervals (Again 1d, Hard 3d, Good 7d, Easy 14d).
 - 3D flip card review modal with hotkey navigation (Space to flip, 1 to 4 to grade) and streak tracking.
 
+<p align="center">
+  <img src="docs/images/omnivault-4.png" alt="Spaced Repetition Daily Review Modal" width="100%" />
+</p>
+
 ### 6. Interactive Knowledge Graph
 - HTML5 Canvas 2D force-directed physics simulation mapping relationships between documents, tags, and domains.
 - Real-time zoom, pan, node dragging, keyword search filtering, and click-to-read navigation.
+
+<p align="center">
+  <img src="docs/images/omnivault-3.png" alt="Interactive Knowledge Graph View" width="100%" />
+</p>
 
 ### 7. Offline TextRank Summarizer & Bring-Your-Own-Key AI
 - 100% offline graph-based TextRank algorithm extracts core takeaways, reading ease levels, and keyword clusters.
@@ -106,14 +106,13 @@ You can highlight text in five colors, record margin notes, listen to saved arti
 - Manifest V3 Extension: browser companion extension with `Alt+S` shortcut to clip articles directly into local storage.
 - RSS and Atom Feed Reader: subscribe to tech blogs and publications with one-click vault import.
 
-### 11. Reading Analytics & Custom Typography
-- 5 reading color themes: Paper, Sepia, Charcoal, Nord, and OLED Black.
-- Configurable typography: Serif (Georgia), Sans-Serif (System), Monospace (JetBrains Mono), with line height and margin width sliders.
-- Bionic reading mode guides natural eye tracking.
-- Visual analytics modal tracks total words read, reading speed, time spent, tag distributions, and active streaks.
+### 11. Responsive Architecture & Adaptive Mobile Design
+- Optimized for desktop (1440px+), tablet (768px), and mobile (390px) form factors.
+- Slide-over mobile drawer for one-handed navigation through reading inboxes, smart views, and tags.
+- Touch-friendly card actions, responsive typography controls, and full-screen Zen mode.
 
 <p align="center">
-  <img src="docs/images/omnivault-5.png" alt="Reading Analytics and Health Modal" width="100%" />
+  <img src="docs/images/omnivault-5.png" alt="Omnivault Mobile Responsive View" width="400" />
 </p>
 
 ---

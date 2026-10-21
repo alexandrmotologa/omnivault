@@ -14,6 +14,7 @@ import {
   Zap,
   Compass,
   Sparkles,
+  X,
 } from 'lucide-react';
 import { ArticleStatus, SmartView } from '../../lib/db/types';
 
@@ -39,6 +40,8 @@ interface SidebarProps {
   onOpenDailyReview: () => void;
   onOpenKnowledgeGraph: () => void;
   onOpenBookmarklet: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const AppSidebar: React.FC<SidebarProps> = ({
@@ -55,6 +58,8 @@ export const AppSidebar: React.FC<SidebarProps> = ({
   onOpenDailyReview,
   onOpenKnowledgeGraph,
   onOpenBookmarklet,
+  isMobileOpen = false,
+  onCloseMobile,
 }) => {
   const navItems = [
     {
@@ -111,9 +116,33 @@ export const AppSidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="w-56 shrink-0 h-[calc(100vh-3.5rem)] sticky top-14 border-r border-[var(--border-color)] bg-[var(--bg-secondary)]/40 p-3 flex flex-col justify-between overflow-y-auto">
-      <div className="space-y-5">
-        {/* Core Navigation List */}
+    <>
+      {/* Mobile Backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-30 md:hidden animate-in fade-in duration-200"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      <aside
+        className={`fixed md:sticky top-14 left-0 z-40 md:z-auto h-[calc(100vh-3.5rem)] w-64 md:w-56 shrink-0 border-r border-[var(--border-color)] bg-[var(--bg-card)] md:bg-[var(--bg-secondary)]/40 p-3 flex flex-col justify-between overflow-y-auto transition-transform duration-200 ease-in-out shadow-2xl md:shadow-none ${
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        <div className="space-y-5">
+          {/* Mobile Close Button Header */}
+          <div className="flex md:hidden items-center justify-between pb-2 border-b border-[var(--border-color)]">
+            <span className="text-xs font-semibold text-[var(--text-primary)]">Navigation Menu</span>
+            <button
+              onClick={onCloseMobile}
+              className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Core Navigation List */}
         <nav className="space-y-0.5">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -299,5 +328,6 @@ export const AppSidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
     </aside>
+    </>
   );
 };

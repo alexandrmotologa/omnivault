@@ -49,6 +49,7 @@ export function App() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // TTS State
   const [ttsState, setTTSState] = useState<TTSState>(ttsEngine.getState());
@@ -331,6 +332,7 @@ export function App() {
         dueReviewsCount={counts.dueReviews}
         currentTheme={preferences.theme}
         onThemeChange={(th: ReaderTheme) => handleUpdatePreferences({ ...preferences, theme: th })}
+        onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
       />
 
       {/* Main Workspace: Either Article Reader or Vault Explorer */}
@@ -377,6 +379,8 @@ export function App() {
             onOpenDailyReview={() => setIsReviewModalOpen(true)}
             onOpenKnowledgeGraph={() => setIsGraphModalOpen(true)}
             onOpenBookmarklet={() => setIsBookmarkletOpen(true)}
+            isMobileOpen={isMobileSidebarOpen}
+            onCloseMobile={() => setIsMobileSidebarOpen(false)}
           />
 
           {/* Center Articles View */}

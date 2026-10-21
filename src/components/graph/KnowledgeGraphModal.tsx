@@ -425,7 +425,7 @@ export const KnowledgeGraphModal: React.FC<KnowledgeGraphModalProps> = ({
             onMouseUp={handleMouseUp}
             onClick={handleClick}
             onWheel={handleWheel}
-            className="w-full h-[520px] cursor-grab active:cursor-grabbing block"
+            className="w-full h-[360px] sm:h-[520px] cursor-grab active:cursor-grabbing block"
           />
 
           {/* Hover Tooltip Overlay */}
