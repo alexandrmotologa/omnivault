@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" fill="none">
+  <defs>
+    <linearGradient id="vaultGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="44" fill="url(#vaultGrad192)" />
+  <path d="M54 44H138V148L96 124L54 148V44Z" fill="#ffffff" />
+  <circle cx="96" cy="74" r="10" fill="#2563eb" />
+</svg>
